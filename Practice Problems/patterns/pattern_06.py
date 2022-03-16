@@ -1,0 +1,13 @@
+# 5
+# 4 4
+# 3 3 3
+# 2 2 2 2
+# 1 1 1 1 1
+rows = int(input('Enter a number of rows : '))
+number = rows
+for row in range(1, rows + 1):
+    for col in range(1, rows + 1):
+        if col <= row:
+            print(number, end=" ")
+    number -= 1
+    print()
