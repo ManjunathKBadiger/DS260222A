@@ -15,7 +15,8 @@ class LMS:
             self.bookDict.update({str(id):{'books_title':line.replace("\n",""),
             "lender_name":"", "status":"Available"}})
             id += 1
-        
+
+
     def displayBooks(self):
         print("------------List Of Books-------------")
         print("BookID \t\t   Titile")
@@ -36,11 +37,35 @@ class LMS:
         else:
             print("Book Id Not Found")
     
+    def addBooks(self):
+        new_book = input("Enter Book Titile : ")
+        if new_book == "":
+            return self.addBooks()
+        else:
+            with open(self.listOfBooks, "a") as file_update:
+                file_update.writelines(f"{new_book}\n")
+            self.bookDict.update({str(int(max(self.bookDict))+1):{'books_title': new_book,
+            'lender_name':"", "status": "Available"}})
+        print(f"The books {new_book} has been added successfully....")
+        
+    def return_books(self):
+        bookId = input("Enter Books ID : ")
+        if bookId in self.bookDict.keys():
+            if self.bookDict[bookId]['status'] == "Available":
+                print("This book is already available in Library, Please check the Book ID ")
+                return self.return_books()
+            elif not self.bookDict[bookId]['status'] == "Available":
+                self.bookDict[bookId]['lender_name'] = ''
+                self.bookDict[bookId]['status'] = 'Available'
+                print("Successfully updated...")
+        else:
+            print("Book ID not found")
+    
 
 
 try:
     lms = LMS("lms_file.txt", "Python LMS")
-    press_key_list = {"D": "Display Books", "I": "Issue Books", "Q": "Quit"}
+    press_key_list = {"D": "Display Books", "I": "Issue Books", "A":"Add BOOK", "R":"Return Book","Q": "Quit"}
     
     key_press = False
 
@@ -55,6 +80,12 @@ try:
         elif key_press == "D":
             print("\n Current Selection : Display BOOK\n")
             lms.displayBooks()
+        elif key_press == "A":
+            print("\n Current Selection : ADD BOOK\n")
+            lms.addBooks()
+        elif key_press == "R":
+            print("\n Current Selection : Return BOOK\n")
+            lms.return_books()
         elif key_press == "Q":
             break
         else:
